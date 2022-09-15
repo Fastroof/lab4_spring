@@ -10,7 +10,24 @@
     <link href='https://fonts.googleapis.com/css?family=Spectral' rel='stylesheet'>
     <title>Login</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+            crossorigin="anonymous"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+            rel="stylesheet"
+    />
     <style>
         html,
         body {
@@ -50,12 +67,27 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
+
+        .oauth {
+            border-bottom: solid 1px #e5e5e5;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body class="text-center">
 <main class="form w-100 m-auto">
+    <h1 class="h3 mb-3 fw-normal">Увійти в акаунт</h1>
+    <span class="text-secondary">Вхід через OAuth2</span>
+    <div class="oauth">
+        <div class="social">
+            <a class="btn btn-primary" style="background-color: #dd4b39;" th:href="@{/oauth2/authorization/google}" role="button">
+                <i class="fab fa-google me-4"></i>Google
+            </a>
+        </div>
+    </div>
+    <span class="text-secondary">Вхід через email та пароль</span>
     <form th:action="@{/login}" method="post">
-        <h1 class="h3 mb-3 fw-normal">Увійти в акаунт</h1>
         <div class="alert alert-danger" role="alert" th:if="${param.error}">
             Неправильний email і/або пароль
         </div>
@@ -73,5 +105,10 @@
         <a href="/">До головної сторінки</a>
     </form>
 </main>
+<!-- MDB -->
+<script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script>
 </body>
 </html>

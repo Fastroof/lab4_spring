@@ -62,12 +62,8 @@
       <label for="floatingEmail">Email</label>
     </div>
     <div class="form-floating">
-      <input type="text" th:field="*{firstName}" maxlength="255" name="firstName" class="form-control" id="floatingFirstName" required>
-      <label for="floatingFirstName">Ім'я</label>
-    </div>
-    <div class="form-floating">
-      <input type="text" th:field="*{lastName}" maxlength="255" name="lastName" class="form-control" id="floatingLastName" required>
-      <label for="floatingLastName">Прізвище</label>
+      <input type="text" th:field="*{fullName}" maxlength="255" name="fullName" class="form-control" id="floatingFullName" required>
+      <label for="floatingFullName">Ім'я та прізвище</label>
     </div>
     <div class="form-floating">
       <input type="password" th:field="*{password}" minlength="8" maxlength="255" name="password" class="form-control" id="floatingPassword" required>

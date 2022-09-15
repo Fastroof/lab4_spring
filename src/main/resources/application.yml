@@ -1,0 +1,17 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  thymeleaf:
+    view-names: thymeleaf/*
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 266838271022-rvslt803ato8fs5gihu8mr10l5saj740.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile

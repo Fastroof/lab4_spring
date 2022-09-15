@@ -1,5 +1,6 @@
 package com.fastroof.lab4_spring.entity;
 
+import com.fastroof.lab4_spring.enums.Provider;
 import lombok.*;
 
 @Getter
@@ -11,6 +12,6 @@ public class User {
     private Long id;
     private String email;
     private String password;
-    private String firstName;
-    private String lastName;
+    private String fullName;
+    private Provider provider;
 }

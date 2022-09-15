@@ -5,13 +5,13 @@ import com.fastroof.lab4_spring.entity.Order;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Component
+@Service
 @Getter
 @Setter
 public class FakeOrderRepository implements OrderRepository{

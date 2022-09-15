@@ -1,4 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
@@ -30,7 +31,7 @@
       <td><c:out value="${room.configuration.area}"/></td>
       <td><c:out value="${room.configuration.price}"/></td>
       <td><c:out value="${room.configuration.bedroomCount}"/></td>
-      <td><c:out value="${room.user.firstName}"/> <c:out value="${room.user.lastName}"/> <c:out value="${room.user.email}"/></td>
+      <td><c:out value="${room.user.fullName}"/> <c:out value="${room.user.email}"/></td>
     </tr>
     </c:forEach>
   </tbody>
