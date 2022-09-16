@@ -32,9 +32,7 @@ public class RoomRestController {
                 fakeRoomConfigurationRepository.findAllByAreaAndBedroomCountAndPrice(area, bedroomCount, price)
         ){
             Room room = fakeRoomRepository.findByRoomConfiguration(roomConfiguration);
-            if (room != null){
-                rooms.add(room);
-            }
+            rooms.add(room);
         }
         return rooms;
     }
