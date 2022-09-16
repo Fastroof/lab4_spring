@@ -8,6 +8,7 @@ import com.fastroof.lab4_spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,7 @@ public class RoomRestController {
     }
 
     @PostMapping("/api/rooms")
-    Room newRoom(Room newRoom) {
+    Room newRoom(@Valid Room newRoom) {
         fakeRoomConfigurationRepository.getRoomConfigurations().add(newRoom.getConfiguration());
         newRoom.setUser(fakeUserRepository.getUsers().get(0));
         newRoom.setId((long) fakeRoomRepository.getRooms().size());
@@ -57,7 +58,7 @@ public class RoomRestController {
     }
 
     @PutMapping("/api/rooms/{id}")
-    Room editRoom(Room editedRoom, @PathVariable Long id) {
+    Room editRoom(@Valid Room editedRoom, @PathVariable Long id) {
         Room oldRoom = fakeRoomRepository.findById(id);
         if (oldRoom == null) {
             throw new RoomNotFoundException(id);

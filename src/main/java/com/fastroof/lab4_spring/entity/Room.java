@@ -2,6 +2,9 @@ package com.fastroof.lab4_spring.entity;
 
 import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -9,7 +12,11 @@ import lombok.*;
 @ToString
 public class Room {
     private Long id;
+    @NotNull
+    @Valid
     private RoomConfiguration configuration;
+    @NotNull
+    @Valid
     private RoomDescription description;
     private User user;
 }

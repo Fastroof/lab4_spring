@@ -2,6 +2,9 @@ package com.fastroof.lab4_spring.entity;
 
 import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -10,8 +13,14 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 public class RoomConfiguration {
+    @NotNull
+    @Min(1)
     private Double area;
+    @NotNull
+    @Min(1)
     private Integer bedroomCount;
+    @NotNull
+    @Min(1)
     private Integer price;
 
     @Override
