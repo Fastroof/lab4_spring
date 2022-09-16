@@ -55,15 +55,24 @@ public class RoomRestController {
     }
 
     @PutMapping("/api/rooms/{id}")
-    Room editRoom(@RequestBody Room editedRoom, @PathVariable Long id) {
-        int index = fakeRoomRepository.getRooms().indexOf(fakeRoomRepository.findById(id));
+    Room editRoom(Room editedRoom, @PathVariable Long id) {
+        Room oldRoom = fakeRoomRepository.findById(id);
+        // Update RoomConfiguration
+        int RCindex = fakeRoomConfigurationRepository.getRoomConfigurations().indexOf(oldRoom.getConfiguration());
+        fakeRoomConfigurationRepository.getRoomConfigurations().set(RCindex, editedRoom.getConfiguration());
+        // Update Room
+        int index = fakeRoomRepository.getRooms().indexOf(oldRoom);
+        editedRoom.setUser(oldRoom.getUser());
+        editedRoom.getDescription().setCreationDate(new Date());
         fakeRoomRepository.getRooms().set(index, editedRoom);
         return editedRoom;
     }
 
     @DeleteMapping("/api/rooms/{id}")
     boolean deleteRoom(@PathVariable Long id) {
-        return fakeRoomRepository.getRooms().remove(fakeRoomRepository.findById(id));
+        Room room = fakeRoomRepository.findById(id);
+        fakeRoomConfigurationRepository.getRoomConfigurations().remove(room.getConfiguration());
+        return fakeRoomRepository.getRooms().remove(room);
     }
 
 }
