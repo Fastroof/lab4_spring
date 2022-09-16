@@ -51,12 +51,19 @@ public class RoomRestController {
 
     @GetMapping("/api/rooms/{id}")
     Room getRoom(@PathVariable Long id) {
-        return fakeRoomRepository.findById(id);
+        Room room = fakeRoomRepository.findById(id);
+        if (room == null) {
+            throw new RoomNotFoundException(id);
+        }
+        return room;
     }
 
     @PutMapping("/api/rooms/{id}")
     Room editRoom(Room editedRoom, @PathVariable Long id) {
         Room oldRoom = fakeRoomRepository.findById(id);
+        if (oldRoom == null) {
+            throw new RoomNotFoundException(id);
+        }
         // Update RoomConfiguration
         int RCindex = fakeRoomConfigurationRepository.getRoomConfigurations().indexOf(oldRoom.getConfiguration());
         fakeRoomConfigurationRepository.getRoomConfigurations().set(RCindex, editedRoom.getConfiguration());
@@ -71,6 +78,9 @@ public class RoomRestController {
     @DeleteMapping("/api/rooms/{id}")
     boolean deleteRoom(@PathVariable Long id) {
         Room room = fakeRoomRepository.findById(id);
+        if (room == null) {
+            throw new RoomNotFoundException(id);
+        }
         fakeRoomConfigurationRepository.getRoomConfigurations().remove(room.getConfiguration());
         return fakeRoomRepository.getRooms().remove(room);
     }
