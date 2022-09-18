@@ -42,6 +42,10 @@ public class FakeRoomRepository implements RoomRepository {
         setFakeRoomDescriptionRepository(new FakeRoomDescriptionRepository());
         rooms.add(new Room(0L, fakeRoomConfigurationRepository.getRoomConfigurations().get(0), fakeRoomDescriptionRepository.getRoomDescriptions().get(0), fakeUserRepository.getUsers().get(0)));
         rooms.add(new Room(1L, fakeRoomConfigurationRepository.getRoomConfigurations().get(1), fakeRoomDescriptionRepository.getRoomDescriptions().get(1), fakeUserRepository.getUsers().get(1)));
+        rooms.add(new Room(2L, fakeRoomConfigurationRepository.getRoomConfigurations().get(2), fakeRoomDescriptionRepository.getRoomDescriptions().get(2), fakeUserRepository.getUsers().get(1)));
+        rooms.add(new Room(3L, fakeRoomConfigurationRepository.getRoomConfigurations().get(3), fakeRoomDescriptionRepository.getRoomDescriptions().get(3), fakeUserRepository.getUsers().get(1)));
+        rooms.add(new Room(4L, fakeRoomConfigurationRepository.getRoomConfigurations().get(4), fakeRoomDescriptionRepository.getRoomDescriptions().get(4), fakeUserRepository.getUsers().get(1)));
+        rooms.add(new Room(5L, fakeRoomConfigurationRepository.getRoomConfigurations().get(5), fakeRoomDescriptionRepository.getRoomDescriptions().get(5), fakeUserRepository.getUsers().get(1)));
     }
 
     @Override

@@ -7,15 +7,19 @@ import com.fastroof.lab4_spring.repository.RoomDescriptionRepository;
 import com.fastroof.lab4_spring.repository.RoomRepository;
 import com.fastroof.lab4_spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Validated
 public class RoomRestController {
     private final RoomRepository fakeRoomRepository;
     private final RoomConfigurationRepository fakeRoomConfigurationRepository;
@@ -31,7 +35,12 @@ public class RoomRestController {
     }
 
     @GetMapping("/rooms")
-    List<Room> getRooms(@RequestParam(required = false) Double area , @RequestParam(required = false) Integer bedroomCount, @RequestParam(required = false) Integer price) {
+    List<Room> getRooms(@RequestParam(required = false) Double area ,
+                        @RequestParam(required = false) Integer bedroomCount,
+                        @RequestParam(required = false) Integer price,
+                        @Valid @Min(0) @RequestParam(required = false, defaultValue = "0")  Integer page,
+                        @Valid @Min(1) @Max(5) @RequestParam(required = false, defaultValue = "3")  Integer size
+    ) {
         List<Room> rooms = new ArrayList<>();
         for (RoomConfiguration roomConfiguration :
                 fakeRoomConfigurationRepository.findAllByAreaAndBedroomCountAndPrice(area, bedroomCount, price)
@@ -39,7 +48,12 @@ public class RoomRestController {
             Room room = fakeRoomRepository.findByRoomConfiguration(roomConfiguration);
             rooms.add(room);
         }
-        return rooms;
+        int startIndex = page * size;
+        int endIndex = page * size + size;
+        if (endIndex > rooms.size()) {
+            throw new RoomNotFoundException((long) endIndex);
+        }
+        return rooms.subList(startIndex, endIndex);
     }
 
     @PostMapping("/rooms")
