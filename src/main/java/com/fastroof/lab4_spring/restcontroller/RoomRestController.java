@@ -3,6 +3,7 @@ package com.fastroof.lab4_spring.restcontroller;
 import com.fastroof.lab4_spring.entity.Room;
 import com.fastroof.lab4_spring.entity.RoomConfiguration;
 import com.fastroof.lab4_spring.repository.RoomConfigurationRepository;
+import com.fastroof.lab4_spring.repository.RoomDescriptionRepository;
 import com.fastroof.lab4_spring.repository.RoomRepository;
 import com.fastroof.lab4_spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +15,22 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class RoomRestController {
     private final RoomRepository fakeRoomRepository;
-    private final UserRepository fakeUserRepository;
     private final RoomConfigurationRepository fakeRoomConfigurationRepository;
+    private final RoomDescriptionRepository fakeRoomDescriptionRepository;
+    private final UserRepository fakeUserRepository;
 
     @Autowired
-    public RoomRestController(RoomRepository fakeRoomRepository, UserRepository fakeUserRepository, RoomConfigurationRepository fakeRoomConfigurationRepository) {
+    public RoomRestController(RoomRepository fakeRoomRepository, RoomConfigurationRepository fakeRoomConfigurationRepository, RoomDescriptionRepository fakeRoomDescriptionRepository, UserRepository fakeUserRepository) {
         this.fakeRoomRepository = fakeRoomRepository;
-        this.fakeUserRepository = fakeUserRepository;
         this.fakeRoomConfigurationRepository = fakeRoomConfigurationRepository;
+        this.fakeRoomDescriptionRepository = fakeRoomDescriptionRepository;
+        this.fakeUserRepository = fakeUserRepository;
     }
 
-    @GetMapping("/api/rooms")
+    @GetMapping("/rooms")
     List<Room> getRooms(@RequestParam(required = false) Double area , @RequestParam(required = false) Integer bedroomCount, @RequestParam(required = false) Integer price) {
         List<Room> rooms = new ArrayList<>();
         for (RoomConfiguration roomConfiguration :
@@ -38,8 +42,9 @@ public class RoomRestController {
         return rooms;
     }
 
-    @PostMapping("/api/rooms")
+    @PostMapping("/rooms")
     Room newRoom(@Valid Room newRoom) {
+        fakeRoomDescriptionRepository.getRoomDescriptions().add(newRoom.getDescription());
         fakeRoomConfigurationRepository.getRoomConfigurations().add(newRoom.getConfiguration());
         newRoom.setUser(fakeUserRepository.getUsers().get(0));
         newRoom.setId((long) fakeRoomRepository.getRooms().size());
@@ -48,7 +53,7 @@ public class RoomRestController {
         return newRoom;
     }
 
-    @GetMapping("/api/rooms/{id}")
+    @GetMapping("/rooms/{id}")
     Room getRoom(@PathVariable Long id) {
         Room room = fakeRoomRepository.findById(id);
         if (room == null) {
@@ -57,31 +62,31 @@ public class RoomRestController {
         return room;
     }
 
-    @PutMapping("/api/rooms/{id}")
+    @PutMapping("/rooms/{id}")
     Room editRoom(@Valid Room editedRoom, @PathVariable Long id) {
         Room oldRoom = fakeRoomRepository.findById(id);
         if (oldRoom == null) {
             throw new RoomNotFoundException(id);
         }
-        // Update RoomConfiguration
-        int RCindex = fakeRoomConfigurationRepository.getRoomConfigurations().indexOf(oldRoom.getConfiguration());
-        fakeRoomConfigurationRepository.getRoomConfigurations().set(RCindex, editedRoom.getConfiguration());
-        // Update Room
         int index = fakeRoomRepository.getRooms().indexOf(oldRoom);
+        fakeRoomConfigurationRepository.getRoomConfigurations().set(index, editedRoom.getConfiguration());
+        fakeRoomDescriptionRepository.getRoomDescriptions().set(index, editedRoom.getDescription());
         editedRoom.setUser(oldRoom.getUser());
-        editedRoom.getDescription().setCreationDate(new Date());
+        editedRoom.getDescription().setCreationDate(oldRoom.getDescription().getCreationDate());
         fakeRoomRepository.getRooms().set(index, editedRoom);
         return editedRoom;
     }
 
-    @DeleteMapping("/api/rooms/{id}")
-    boolean deleteRoom(@PathVariable Long id) {
+    @DeleteMapping("/rooms/{id}")
+    Room deleteRoom(@PathVariable Long id) {
         Room room = fakeRoomRepository.findById(id);
         if (room == null) {
             throw new RoomNotFoundException(id);
         }
         fakeRoomConfigurationRepository.getRoomConfigurations().remove(room.getConfiguration());
-        return fakeRoomRepository.getRooms().remove(room);
+        fakeRoomDescriptionRepository.getRoomDescriptions().remove(room.getDescription());
+        fakeRoomRepository.getRooms().remove(room);
+        return room;
     }
 
 }
