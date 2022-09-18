@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI Documentation
+  description: Документація RESTful вебсервісу.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/'
+paths:
+  /api/rooms:
+    get:
+      summary: Знайти квартири по параметрам.
+      description: Пошук квартир по параметрам (Площа квартири, кількість спальних кімнат, ціна оренди).
+      parameters:
+        - name: area
+          in: query
+          description: Площа квартири.
+          required: false
+          schema:
+            type: number
+        - name: bedroomCount
+          in: query
+          description: Кількість спальних кімнат.
+          required: false
+          schema:
+            type: integer
+        - name: price
+          in: query
+          description: Ціна оренди.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успішний пошук квартири.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+
+    post:
+      summary: Додати нову квартиру до списку.
+      description: Додання квартири до списку існуючих.
+      parameters:
+        - name: configuration.area
+          in: query
+          description: Площа квартири.
+          required: true
+          schema:
+            type: number
+        - name: configuration.bedroomCount
+          in: query
+          description: Кількість спальних кімнат.
+          required: true
+          schema:
+            type: integer
+        - name: configuration.price
+          in: query
+          description: Ціна оренди.
+          required: true
+          schema:
+            type: integer
+        - name: description.description
+          in: query
+          description: Опис квартири.
+          required: true
+          schema:
+            type: string
+        - name: description.address
+          in: query
+          description: Адреса.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успішне додання квартири.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '400':
+          description: Передано невалідні значення.
+  /api/rooms/{id}:
+    get:
+      summary: Отримання квартири по id
+      description: Отримання квартири по id з повним описом.
+      parameters:
+        - name: id
+          in: path
+          description: id  квартири.
+          required: true
+          schema:
+            type: number
+
+      responses:
+        '200':
+          description: Успішний вивід квартири.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '404':
+          description: Не знайдено кімнати за заданим id.
+    put:
+      summary: Оновлення інформації про квартиру.
+      description: Перезапис інформації про існуючу квартиру новими даними.
+      parameters:
+        - name: id
+          in: path
+          description: id  квартири.
+          required: true
+          schema:
+            type: number
+        - name: configuration.area
+          in: query
+          description: Площа квартири.
+          required: true
+          schema:
+            type: number
+        - name: configuration.bedroomCount
+          in: query
+          description: Кількість спальних кімнат.
+          required: true
+          schema:
+            type: integer
+        - name: configuration.price
+          in: query
+          description: Ціна оренди.
+          required: true
+          schema:
+            type: integer
+        - name: description.description
+          in: query
+          description: Опис квартири.
+          required: true
+          schema:
+            type: string
+        - name: description.address
+          in: query
+          description: Адреса.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успішне оновлення квартири.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '400':
+          description: Передано невалідні значення.
+        '404':
+          description: Не знайдено кімнати за заданим id.
+    delete:
+      summary: Оримання квартири для видалення за допомогою id
+      description: Оримання квартири для видалення за допомогою id, після видалення повернеться видалена квартира.
+      parameters:
+        - name: id
+          in: path
+          description: id  квартири.
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Успішне видалення квартири.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '404':
+          description: Не знайдено кімнати за заданим id.
+  /api/orders:
+    get:
+      summary: Отримання всіх замовлень.
+      description: Отримання всіх замовлень.
+      responses:
+        '200':
+          description: Успішне отримання всіх замовлень.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+
+components:
+  schemas:
+    Room:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        configuration:
+          $ref: '#/components/schemas/RoomConfiguration'
+        description:
+          $ref: '#/components/schemas/RoomDescription'
+        user:
+          $ref: '#/components/schemas/User'
+    RoomConfiguration:
+      type: object
+      properties:
+        area:
+          type: number
+          example: 68
+
+        bedroomCount:
+          type: integer
+          example: 3
+        price:
+          type: number
+          example: 399.99
+
+    RoomDescription:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Опис кімнати.
+        address:
+          type: string
+          example: Київ вл.Янгелля 20.
+        creationDate:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          example: jon123@gmail.com
+        fullName:
+          type: string
+          example: Jon Wilson
+    Order:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        room:
+          $ref: '#/components/schemas/Room'
+        dateStartContract:
+          type: string
+          format: date-time
+        dateEndContract:
+          type: string
+          format: date-time
+        price:
+          type: number
+          example: 399.99
+
+
+
+
+
+
+
+
+
+
+
+
