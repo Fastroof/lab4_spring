@@ -50,8 +50,9 @@ public class RoomRestController {
         }
         int startIndex = page * size;
         int endIndex = page * size + size;
-        if (endIndex > rooms.size()) {
-            throw new RoomNotFoundException((long) endIndex);
+        if (startIndex > rooms.size() || endIndex > rooms.size()) {
+            startIndex = Math.min(startIndex, rooms.size());
+            endIndex = rooms.size();
         }
         return rooms.subList(startIndex, endIndex);
     }
