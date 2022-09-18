@@ -29,6 +29,20 @@ paths:
           required: false
           schema:
             type: integer
+        - name: page
+          in: query
+          description: Сторінка.
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Розмір сторінки.
+          required: false
+          schema:
+            type: integer
+            default: 3
       responses:
         '200':
           description: Успішний пошук квартири.
@@ -155,8 +169,8 @@ paths:
         '404':
           description: Не знайдено кімнати за заданим id.
     delete:
-      summary: Оримання квартири для видалення за допомогою id
-      description: Оримання квартири для видалення за допомогою id, після видалення повернеться видалена квартира.
+      summary: Видалення квартири по id
+      description: Видалення квартири по id, після видалення повернеться видалена квартира.
       parameters:
         - name: id
           in: path
