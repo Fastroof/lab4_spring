@@ -1,8 +1,7 @@
 package com.fastroof.lab4_spring.controller;
 
 import com.fastroof.lab4_spring.entity.Room;
-import com.fastroof.lab4_spring.repository.RoomRepository;
-import com.fastroof.lab4_spring.repository.UserRepository;
+import com.fastroof.lab4_spring.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RoomController {
-    private final RoomRepository fakeRoomRepository;
-    private final UserRepository fakeUserRepository;
+    private final RoomService roomService;
 
     @Autowired
-    public RoomController(RoomRepository fakeRoomRepository, UserRepository fakeUserRepository) {
-        this.fakeRoomRepository = fakeRoomRepository;
-        this.fakeUserRepository = fakeUserRepository;
+    public RoomController(RoomService roomServiceImpl) {
+        this.roomService = roomServiceImpl;
     }
 
     @GetMapping("/room/new")
@@ -31,28 +28,27 @@ public class RoomController {
 
     @PostMapping("/room/new")
     public String submitNewRoom(@ModelAttribute Room room) {
-        room.setUser(fakeUserRepository.getUsers().get(0));
-        fakeRoomRepository.getRooms().add(room);
+        roomService.addRoom(room);
         return "redirect:../";
     }
 
     @GetMapping("/room/edit")
     public String editRoom(Model model, @RequestParam Long id) {
-        Room room = fakeRoomRepository.findById(id);
+        Room room = roomService.getRoom(id);
         model.addAttribute("room", room);
         return "thymeleaf/room/edit";
     }
 
     @PostMapping("/room/edit")
     public String submitEditedRoom(@ModelAttribute Room room, @RequestParam Long id) {
-        int index = fakeRoomRepository.getRooms().indexOf(fakeRoomRepository.findById(id));
-        fakeRoomRepository.getRooms().set(index, room);
+        Room oldRoom = roomService.getRoom(id);
+        roomService.updateRoom(oldRoom, room);
         return "redirect:../";
     }
 
     @GetMapping("/room/delete")
     public String deleteRoom(@RequestParam Long id) {
-        fakeRoomRepository.getRooms().remove(fakeRoomRepository.findById(id));
+        roomService.deleteRoom(roomService.getRoom(id));
         return "redirect:../";
     }
 }
