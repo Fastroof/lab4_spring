@@ -1,10 +1,8 @@
 package com.fastroof.lab4_spring.controller;
 
-import com.fastroof.lab4_spring.entity.User;
 import com.fastroof.lab4_spring.pojo.UserRegistrationRequest;
-import com.fastroof.lab4_spring.repository.UserRepository;
+import com.fastroof.lab4_spring.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @GetMapping("/login")
@@ -33,27 +31,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     public String processRegister(ModelMap model, UserRegistrationRequest request) {
-        if (userRepository.findByEmail(request.getEmail()) != null) {
-            model.addAttribute("message_number", 1);
-            model.addAttribute("msg", String.format("Користувач з email %s вже зареєстрований.", request.getEmail()));
-            model.addAttribute("link", "/registration");
-            model.addAttribute("text", "Натисніть, щоб спробувати ще раз ➜");
-        } else {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(request.getPassword());
-            // Коли буде додана JDBC, id будуть генеруватися автоматично
-            User user = new User();
-            user.setEmail(request.getEmail());
-            user.setPassword(encodedPassword);
-            user.setFullName(request.getFullName());
-
-//            userRepository.save(user);
-            userRepository.getUsers().add(user);
-            model.addAttribute("message-number", 0);
-            model.addAttribute("msg", "Ви успішно зареєстровані!");
-            model.addAttribute("link", "/login");
-            model.addAttribute("text", "Натисніть, щоб продовжити ➜");
-        }
+        model.addAllAttributes(authService.processRegister(request));
         return "info";
     }
 }

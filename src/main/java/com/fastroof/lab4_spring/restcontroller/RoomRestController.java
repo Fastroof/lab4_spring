@@ -1,11 +1,6 @@
 package com.fastroof.lab4_spring.restcontroller;
 
 import com.fastroof.lab4_spring.entity.Room;
-import com.fastroof.lab4_spring.entity.RoomConfiguration;
-import com.fastroof.lab4_spring.repository.RoomConfigurationRepository;
-import com.fastroof.lab4_spring.repository.RoomDescriptionRepository;
-import com.fastroof.lab4_spring.repository.RoomRepository;
-import com.fastroof.lab4_spring.repository.UserRepository;
 import com.fastroof.lab4_spring.service.RoomService;
 import com.fastroof.lab4_spring.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
